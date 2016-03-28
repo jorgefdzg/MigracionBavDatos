@@ -19,7 +19,114 @@ namespace MigracionDeDatosBav
           List<ClsFamiliares> listaFamiliaresMigrar = new List<ClsFamiliares>();
           listaFamiliaresMigrar = CrearListaFamiliares();
           List<ClsEstudioSocioEconomico> listaEstudios = new List<ClsEstudioSocioEconomico>();
-          listaEstudios = CreaListaEstudiosSocioEconomicos();
+          listaEstudios = CreaListaEstudiosSocioEconomicos(listaViviendaMigrar, listaTitularMigrar);
+        }
+        static List<ClsEstudioSocioEconomico> CreaListaEstudiosSocioEconomicos(List<ClsVivienda> listaVivienda, List<ClsTitular> listaTitular)
+        {
+            List<ClsEstudioSocioEconomico> listaEstudioSocioEconomico = new List<ClsEstudioSocioEconomico>();
+            int contadorestudio=0;
+            foreach (ClsTitular titular in listaTitular) 
+            {
+                ClsEstudioSocioEconomico estudio = new ClsEstudioSocioEconomico();
+                ClsVivienda vivienda = listaVivienda.FirstOrDefault(x => x.IFE == titular.IFETitular);
+                contadorestudio+=1;
+                estudio.NumeroEstudio = contadorestudio;
+                estudio.Programa = "MESA BAV";
+                estudio.NombreGrupo = "MESA BAV";
+                estudio.FechaLevantamiento = ParseaYRetornaFecha(titular.FechaIngreso);
+                estudio.Estado = "Veracruz";
+                estudio.Municipio =ParseaMunicipio(titular.Municipio);
+                estudio.Localidad = titular.Colonia;
+            }
+            return listaEstudioSocioEconomico;
+        }
+        static string ParseaColonia(string municipio, string colonia) {
+            if (colonia.Contains("COYOL")) {
+                return "El Coyol";
+            }
+            if (colonia.Contains("VOLCANES")) {
+                return "Veracruz";
+            }
+            if (colonia.Contains("VIRGINIA")) {
+                return "Veracruz";
+            }
+            if (colonia.Contains("BUENAVISTA")) {
+                return "BuenaVista";
+            }
+            if (colonia.Contains("GUADALUPE")) {
+                return "Colonia Guadalupe";
+            }
+            if (colonia.Contains("RIO MEDIO")) {
+                return "Río Medio";
+            }
+            if (colonia.Contains("ABRIL")) {
+                return "Veracruz";
+            }
+            if (colonia.Contains("")) { 
+            
+            }
+
+        }
+        static string ParseaMunicipio(string municipio) {
+            if (municipio == "") {
+                return "Veracruz";
+            }
+            if (municipio == "VER" || municipio == "VERACRIUZ" || municipio == "VERCARUZ" || municipio == "VERACRUZ" || municipio == "VARACRUZ" || municipio == "VERCRUZ" || municipio == "VERACRUZ9" || municipio == "VERACURZ" || municipio == "V" || municipio == "0" || municipio == "VERRACRUZ")
+            {
+                return "Veracruz";
+            }
+           
+            if (municipio == "BOCA DEL RIO"|| municipio=="B") { 
+            return "Boca del Río";
+            }
+            if (municipio == "MEDELLIN" || municipio=="MEDELLIN DE BRAVO"|| municipio== "EL TEJAR")
+            {
+                return "Medellín de Bravo";
+            }
+            if (municipio == "IGNACIO DE LA LLAVE" || municipio == "IGN. DE LA LLAVE") {
+                return "Ignacio de la Llave";
+            }
+            if (municipio == "MATA DE PITA") {
+                return "Veracruz";
+            }
+            if (municipio == "NARANJOS AMATLAN")
+            {
+                return "Naranjos Amatlán";
+            }
+            if (municipio == "TLALIXCOYAN" || municipio == "TLALIXCOYA,VER")
+            {
+                return "Tlalixcoyan";
+            }
+            if (municipio == "LERDO DE TEJADA" || municipio=="LERDO") {
+                return "Lerdo de Tejada";
+            }
+            if (municipio == "MATA COCUITE")
+            {
+                return "Tlalixcoyan";
+            }
+            if (municipio == "MANLIO FABIO ALTAMIRANO") {
+                return "Manlio Fabio Altamirano";
+            }
+            if (municipio == "INDEPENDENCIA") {
+                return "Martínez de la Torre";
+            }
+            return municipio;
+        }
+        static DateTime ParseaYRetornaFecha(string fecha) {
+            if (fecha == "")
+            {
+                Random gen = new Random();
+                DateTime start = new DateTime(2015, 1, 1);
+                int range = (DateTime.Today - start).Days;
+                return start.AddDays(gen.Next(range));
+            }
+            else {
+                DateTime fechalevantamiento = new DateTime();
+                fechalevantamiento = Convert.ToDateTime(fecha);
+                fechalevantamiento = new DateTime(2015, fechalevantamiento.Month, fechalevantamiento.Day);
+                return fechalevantamiento;
+            }
+
         }
         static List<ClsFamiliares> CrearListaFamiliares() {
             var render = new StreamReader(File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + "\\Familiares.csv"));

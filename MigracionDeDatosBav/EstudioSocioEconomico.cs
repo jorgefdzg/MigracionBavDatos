@@ -36,5 +36,6 @@ namespace MigracionDeDatosBav
         public string TipoDeApoyo { get; set; }
         public string FrecuenciaDeApoyo { get; set; }
         public string DuracionDelApoyo { get; set; }
+        public string IFEAsociativo { get; set; }
     }
 }

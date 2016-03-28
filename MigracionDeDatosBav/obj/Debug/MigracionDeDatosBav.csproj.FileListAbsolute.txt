@@ -4,3 +4,6 @@ D:\Proyectos ASP.net\MigracionDeDatosBav\MigracionDeDatosBav\bin\Debug\Migracion
 D:\Proyectos ASP.net\MigracionDeDatosBav\MigracionDeDatosBav\obj\Debug\MigracionDeDatosBav.csprojResolveAssemblyReference.cache
 D:\Proyectos ASP.net\MigracionDeDatosBav\MigracionDeDatosBav\obj\Debug\MigracionDeDatosBav.exe
 D:\Proyectos ASP.net\MigracionDeDatosBav\MigracionDeDatosBav\obj\Debug\MigracionDeDatosBav.pdb
+C:\Users\jorge.fernandez\Documents\MigracionBavDatos\MigracionDeDatosBav\bin\Debug\MigracionDeDatosBav.exe.config
+C:\Users\jorge.fernandez\Documents\MigracionBavDatos\MigracionDeDatosBav\obj\Debug\MigracionDeDatosBav.exe
+C:\Users\jorge.fernandez\Documents\MigracionBavDatos\MigracionDeDatosBav\obj\Debug\MigracionDeDatosBav.pdb
