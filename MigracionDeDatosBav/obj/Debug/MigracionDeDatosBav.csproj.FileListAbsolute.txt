@@ -7,3 +7,6 @@ D:\Proyectos ASP.net\MigracionDeDatosBav\MigracionDeDatosBav\obj\Debug\Migracion
 C:\Users\jorge.fernandez\Documents\MigracionBavDatos\MigracionDeDatosBav\bin\Debug\MigracionDeDatosBav.exe.config
 C:\Users\jorge.fernandez\Documents\MigracionBavDatos\MigracionDeDatosBav\obj\Debug\MigracionDeDatosBav.exe
 C:\Users\jorge.fernandez\Documents\MigracionBavDatos\MigracionDeDatosBav\obj\Debug\MigracionDeDatosBav.pdb
+C:\Users\jorge\Documents\GitHub\MigracionBavDatos\MigracionDeDatosBav\bin\Debug\MigracionDeDatosBav.exe.config
+C:\Users\jorge\Documents\GitHub\MigracionBavDatos\MigracionDeDatosBav\obj\Debug\MigracionDeDatosBav.exe
+C:\Users\jorge\Documents\GitHub\MigracionBavDatos\MigracionDeDatosBav\obj\Debug\MigracionDeDatosBav.pdb

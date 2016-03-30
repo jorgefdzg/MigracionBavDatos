@@ -36,11 +36,29 @@ namespace MigracionDeDatosBav
                 estudio.FechaLevantamiento = ParseaYRetornaFecha(titular.FechaIngreso);
                 estudio.Estado = "Veracruz";
                 estudio.Municipio =ParseaMunicipio(titular.Municipio);
-                estudio.Localidad = titular.Colonia;
+                estudio.Localidad = ParseaColonia(titular.Colonia);
+                estudio.Vialidad = ParseaNombreCalle(titular.Domicilio);
+                estudio.NumeroExterior =Convert.ToInt32(ParseaCadenaNumerica(titular.Domicilio));
+                estudio.NumeroInterior = 0;
+                estudio.CodigoPostal = titular.CodigoPostal;
+                estudio.TipoVialidad = RandomVialidad();
+                estudio.TipoAsentamiento = RandomAsentamiento();
             }
             return listaEstudioSocioEconomico;
         }
-        static string ParseaColonia(string municipio, string colonia) {
+        static string RandomAsentamiento() {
+            string[] array = { "Barrio", "Colonia", "Unidad" };
+            Random rnd = new Random();
+            int indice = rnd.Next(0, 2);
+            return array[indice];
+        }
+        static string RandomVialidad() {
+            string[] array = { "Andador", "Avenida", "Calle", "Callejón", "Circunvalacion", "Ampliación" };
+            Random rnd = new Random();
+            int indice = rnd.Next(0, 5);
+            return array[indice];
+        }
+        static string ParseaColonia(string colonia) {
             if (colonia.Contains("COYOL")) {
                 return "El Coyol";
             }
@@ -50,7 +68,7 @@ namespace MigracionDeDatosBav
             if (colonia.Contains("VIRGINIA")) {
                 return "Veracruz";
             }
-            if (colonia.Contains("BUENAVISTA")) {
+            if (colonia.Contains("BUENAVISTA") || colonia.Contains("BUENA VISTA")) {
                 return "BuenaVista";
             }
             if (colonia.Contains("GUADALUPE")) {
@@ -62,10 +80,112 @@ namespace MigracionDeDatosBav
             if (colonia.Contains("ABRIL")) {
                 return "Veracruz";
             }
-            if (colonia.Contains("")) { 
-            
+            if (colonia.Contains("LOPEZ MATEOS") || colonia.Contains("MATEOS"))
+            {
+                return "Adolfo López Mateos";
             }
-
+            if (colonia.Contains("MEXICO")) {
+                return "Colonia México";
+            }
+            if (colonia.Contains("MAYO")){
+                return "Primero de Mayo";
+            }
+            if (colonia.Contains("PUENTE")) {
+                return "Fraccionamiento Puente Moreno";
+            }
+            if (colonia.Contains("ALEMAN")) {
+                return "Colonia Miguel Alemán";
+            }
+            if (colonia.Contains("LAURELES")) {
+                return "Los Laureles";
+            }
+            if(colonia.Contains("VEGAS")){
+                return "Las Vegas";   
+            }
+            if (colonia.Contains("TARIMOYA")) {
+                return "Tarimoya";
+            }
+            if (colonia.Contains("PINOS")) {
+                return "Fraccionamiento Geovillas los Pinos";
+            }
+            if (colonia.Contains("HIDALGO")) {
+                return "Miguel Hidalgo y Costilla";
+            }
+            if (colonia.Contains("JUAREZ")) {
+                return "Colonia Benito Juárez";
+            }
+            if (colonia.Contains("VERACRUZANA")) {
+                return "Colonia Revolucionaria Veracruzana (Fidel Herrera Beltrán)";
+            }
+            if (colonia.Contains("VALLE ALTO")) {
+                return "Valle Alto";
+            }
+            if (colonia.Contains("Tejar")) {
+                return "Medellín";
+            }
+            if (colonia.Contains("POCHOTA")) {
+                return "Colonia Nueva la Pochota";
+            }
+            if (colonia.Contains("HEROES")) {
+                return "Colonia Niños Héroes";
+            }
+            if (colonia.Contains("CHAPULTEPEC"))
+            {
+                return "Chapultepec";
+            }
+            if (colonia.Contains("BAJADAS")) {
+                return "Ampliación las Bajadas";
+            }
+            if (colonia.Contains("VERGEL")) {
+                return "El Vergel";
+            }
+            if (colonia.Contains("BRISAS")) {
+                return "Colonia las Brisas";
+            }
+            if (colonia.Contains("REFORMA")) {
+                return "Colonia la Reforma";
+            }
+            if (colonia.Contains("SOTAVENTO")) {
+                return "Hacienda Sotavento";
+            }
+            if (colonia.Contains("LA HERRADURA")) {
+                return "La Herradura";
+            }
+            if (colonia.Contains("MALIBRAN"))
+            {
+                return "Colonia Malibrán";
+            }
+            if (colonia.Contains("ALMENDROS")) {
+                return "Colonia los Almendros";
+            }
+            if (colonia.Contains("LAZARO CARDENAS")) {
+                return "Colonia Lázaro Cárdenas";
+            }
+            if (colonia.Contains("LOPEZ ARIAS")) {
+                return "Colonia Fernando López Arias";
+            }
+            if (colonia.Contains("GUTIERREZ BARRIOS")) {
+                return "Colonia Fernando Gutiérrez Barrios";
+            }
+            if (colonia.Contains("SANTA FE")) {
+                return "Colinas de Santa Fe";
+            }
+            if (colonia.Contains("ESPERANZA")) {
+                return "Colonia Esperanza";
+            }
+            if (colonia.Contains("ZARAGOZA")) {
+                return "Colonia Ignacio Zaragoza";
+            }
+            if (colonia.Contains("ISIDRO")) {
+                return "Colonia San Isidro";
+            }
+            if (colonia.Contains("NOVIEMBRE")) {
+                return "Colonia Veinte de Noviembre";
+            }
+            if (colonia.Contains("SEPTIEMBRE")) {
+                return "Dieciséis de Septiembre";
+            }
+            return "Veracruz";
         }
         static string ParseaMunicipio(string municipio) {
             if (municipio == "") {
