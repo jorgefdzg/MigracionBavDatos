@@ -20,7 +20,37 @@ namespace MigracionDeDatosBav
           listaFamiliaresMigrar = CrearListaFamiliares();
           List<ClsEstudioSocioEconomico> listaEstudios = new List<ClsEstudioSocioEconomico>();
           listaEstudios = CreaListaEstudiosSocioEconomicos(listaViviendaMigrar, listaTitularMigrar);
+          List<ClsEstructuraFamiliar> listaEstructura = new List<ClsEstructuraFamiliar>();
+          listaEstructura = CrearListaEstructura(listaEstudios, listaTitularMigrar, listaFamiliaresMigrar);
         }
+        static List<ClsEstructuraFamiliar> CrearListaEstructura(List<ClsEstudioSocioEconomico> listaEstudios, List<ClsTitular> listaTitulares, List<ClsFamiliares> listaFamiliares) {
+            List<ClsEstructuraFamiliar> listaFamilia = new List<ClsEstructuraFamiliar>();
+            foreach (ClsEstudioSocioEconomico estudio in listaEstudios) {
+                ClsEstructuraFamiliar estructura = new ClsEstructuraFamiliar();
+                ClsTitular titular = listaTitulares.FirstOrDefault(x => x.IFETitular == estudio.IFEAsociativo);
+                estructura.NumeroEstudio = estudio.NumeroEstudio;
+                estructura.Nombre = titular.NombreTitular;
+                estructura.PrimerApellido = titular.ApellidoTitular;
+                estructura.FechaDeNacimiento = CalculaFechaDeNacimiento(titular.FechaDeNacimiento, titular.EdadTitular);
+                estructura.Genero = ParseaSexo(titular.Sexo);
+                estructura.EntidadDeNacimiento = BuscaEntidadDeNacimiento(titular.CURPTitular);
+                List<ClsFamiliares> familiares = listaFamiliares.FindAll(x => x.IFEFamiliares == estudio.IFEAsociativo);
+                foreach (ClsFamiliares familia in familiares) { 
+                
+                }
+            }
+        }
+        static string ParseaSexo(string genero)
+        {
+            if (genero == "MASCULINO")
+            {
+                return "Masculino";
+            }
+            else {
+                return "Femenino";
+            }
+        }
+
         static List<ClsEstudioSocioEconomico> CreaListaEstudiosSocioEconomicos(List<ClsVivienda> listaVivienda, List<ClsTitular> listaTitular)
         {
             List<ClsEstudioSocioEconomico> listaEstudioSocioEconomico = new List<ClsEstudioSocioEconomico>();
@@ -29,22 +59,185 @@ namespace MigracionDeDatosBav
             {
                 ClsEstudioSocioEconomico estudio = new ClsEstudioSocioEconomico();
                 ClsVivienda vivienda = listaVivienda.FirstOrDefault(x => x.IFE == titular.IFETitular);
-                contadorestudio+=1;
-                estudio.NumeroEstudio = contadorestudio;
-                estudio.Programa = "MESA BAV";
-                estudio.NombreGrupo = "MESA BAV";
-                estudio.FechaLevantamiento = ParseaYRetornaFecha(titular.FechaIngreso);
-                estudio.Estado = "Veracruz";
-                estudio.Municipio =ParseaMunicipio(titular.Municipio);
-                estudio.Localidad = ParseaColonia(titular.Colonia);
-                estudio.Vialidad = ParseaNombreCalle(titular.Domicilio);
-                estudio.NumeroExterior =Convert.ToInt32(ParseaCadenaNumerica(titular.Domicilio));
-                estudio.NumeroInterior = 0;
-                estudio.CodigoPostal = titular.CodigoPostal;
-                estudio.TipoVialidad = RandomVialidad();
-                estudio.TipoAsentamiento = RandomAsentamiento();
+                if (vivienda != null)
+                {
+                    contadorestudio += 1;
+                    estudio.NumeroEstudio = contadorestudio;
+                    estudio.Programa = "MESA BAV";
+                    estudio.NombreGrupo = "MESA BAV";
+                    estudio.FechaLevantamiento = ParseaYRetornaFecha(titular.FechaIngreso);
+                    estudio.Estado = "Veracruz";
+                    estudio.Municipio = ParseaMunicipio(titular.Municipio);
+                    estudio.Localidad = ParseaColonia(titular.Colonia);
+                    estudio.Vialidad = ParseaNombreCalle(titular.Domicilio);
+                    estudio.NumeroExterior = Convert.ToInt32(ParseaCadenaParaNumeroExterior(titular.Domicilio));
+                    estudio.NumeroInterior = 0;
+                    estudio.CodigoPostal = titular.CodigoPostal;
+                    estudio.TipoVialidad = RandomVialidad();
+                    estudio.TipoAsentamiento = RandomAsentamiento();
+                    estudio.ServicioLuz = ParseaServicioLuz(vivienda.ServicioEnergia);
+                    estudio.ServicioDrenaje = ParseaServicioDrenaje(vivienda.ServicioDrenaje);
+                    estudio.ServicoBaño = "Descarga directa";
+                    estudio.ServicioCombustible = ParseaCombustible(vivienda.Estufa);
+                    estudio.ServicioAgua = ParseaServicioAgua(vivienda.ServicioAgua);
+                    estudio.Tenencia = ParseaTenencia(vivienda.Economico);
+                    estudio.TipoDeCasa = ParseaTipoDeCasa(vivienda.Tipo);
+                    estudio.Muros = ParseaMuros(vivienda.Material);
+                    estudio.Techo = ParseaTecho(vivienda.Material);
+                    estudio.Piso = ParseaPiso(vivienda.ServicioPiso);
+                    estudio.NumeroDeCuartos = RandomCuartos();
+                    estudio.CuartosParaDormir = RandomCuartosParaDormir(estudio.NumeroDeCuartos);
+                    estudio.TipoDeApoyo = "Cuota";
+                    estudio.FrecuenciaDeApoyo = "Semanal";
+                    estudio.DuracionDelApoyo = "1 año";
+                    estudio.IFEAsociativo = titular.IFETitular;
+
+                    listaEstudioSocioEconomico.Add(estudio);
+                }
             }
             return listaEstudioSocioEconomico;
+        }
+        static int RandomCuartosParaDormir(int cuartos) {
+            if (cuartos >= 3)
+            {
+                return cuartos - 2;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+        static int RandomCuartos(){
+            Random rnd = new Random();
+            int cuartos = rnd.Next(1, 5);
+            return cuartos;
+        }
+        static string ParseaPiso(string serviciopiso) {
+            if (serviciopiso == "MOSAICO") {
+                return "Mosaico, vinil";
+            }
+            if (serviciopiso == "TIERRA") {
+                return "Tierra";
+            }
+            if (serviciopiso == "CEMENTO") {
+                return "Cemento o firme";
+            }
+            return "Tierra";
+        }
+        static string ParseaTecho(string material) {
+            if (material == "CONCRETO")
+            {
+                return "Concreto, losa o viguetas";
+            }
+            if (material.Contains("MATERIAL"))
+            {
+                return "Lámina asbesto, metálica";
+            }
+            if (material.Contains("MADERA"))
+            {
+                return "Madera, teja";
+            }
+            if (material.Contains("ASBESTO"))
+            {
+                return "Concreto, losa o viguetas";
+            }
+            if (material.Contains("LAMINA"))
+            {
+                return "Lámina de cartón, desecho";
+            }
+            return "Concreto, losa o viguetas";
+        }
+        static string ParseaMuros(string material) {
+            if (material == "CONCRETO") {
+                return "Ladrillo, tabique";
+            }
+            if (material.Contains("MATERIAL")) {
+                return "Lámina metálica, asbesto";
+            }
+            if (material.Contains("MADERA")) {
+                return "Madera";
+            }
+            if (material.Contains("ASBESTO")) {
+                return "Adobe";
+            }
+            if (material.Contains("LAMINA")) {
+                return "Desechos, Cartón";
+            }
+            return "Ladrillo, tabique";
+        }
+        static string ParseaTipoDeCasa(string tipo) {
+            if (tipo == "CASA INDEPENDIENTE") {
+                return "Independiente";
+            }
+            if (tipo == "DEPARTAMENTO") {
+                return "Vecindad";
+            }
+            if (tipo == "CUARTO VECINDAD") {
+                return "U. habitacional";
+            }
+            return "Independiente";
+        }
+        static string ParseaTenencia(string economico) {
+            if (economico == "PROPIA") {
+                return "Pagándose";
+            }
+            if (economico == "RENTADA") {
+                return "Rentada";
+            }
+            if (economico == "PRESTADA") {
+                return "Prestada";
+            }
+            return "Propia";
+        }
+
+        static string ParseaServicioAgua(string servicioagua) {
+            if (servicioagua == "RED PUBLICA") {
+                return "Toma domiciliaria";
+            }
+            if (servicioagua == "POZO") {
+                return "Pozo, río, lago";
+            }
+            if (servicioagua == "PIPA") {
+                return "Pipa";
+            }
+            if (servicioagua == "NO TIENE") {
+                return "Sin servicio";
+            }
+
+            return "Sin servicio";
+        }
+        static string ParseaCombustible(int estufa){
+            if (estufa >= 1)
+            {
+                return "Gas tanque";
+            }
+            else {
+                return "Leña o carbón sin chimenea";
+            }
+        }
+        static string ParseaServicioDrenaje(string serviciodrenaje) {
+
+            if (serviciodrenaje == "RED PUBLICA") {
+                return "Red pública";
+            }
+            if (serviciodrenaje == "FOSA SEPTICA") {
+                return "Fosa séptica";
+            }
+            if (serviciodrenaje == "NO TIENE") {
+                return "No tiene drenaje";
+            }
+            return "No tiene drenaje";
+        }
+        static string ParseaServicioLuz(string servicioenergia) 
+        {
+            if (servicioenergia == "SI")
+            {
+                return "Servicio público";
+            }
+            else {
+                return "No tienen";
+            }
+        
         }
         static string RandomAsentamiento() {
             string[] array = { "Barrio", "Colonia", "Unidad" };
@@ -232,8 +425,26 @@ namespace MigracionDeDatosBav
             }
             return municipio;
         }
+        static DateTime CalculaFechaDeNacimiento(string fecha, int edad = 0)
+        {
+          DateTime FechaNacimiento = new DateTime();
+            if (edad != 0 && fecha == "")
+            {
+                Random gen = new Random();
+                DateTime start = new DateTime(2015, 1, 1);
+                start = start.AddYears(-edad);
+                int range = 300;
+                return start.AddDays(gen.Next(range));
+            }
+            if (fecha != "") {
+
+                FechaNacimiento = Convert.ToDateTime(fecha);
+                return FechaNacimiento;
+            }
+            return FechaNacimiento;
+        }
         static DateTime ParseaYRetornaFecha(string fecha) {
-            if (fecha == "")
+            if (fecha == "" || fecha=="0000-00-00")
             {
                 Random gen = new Random();
                 DateTime start = new DateTime(2015, 1, 1);
@@ -250,7 +461,7 @@ namespace MigracionDeDatosBav
         }
         static List<ClsFamiliares> CrearListaFamiliares() {
             var render = new StreamReader(File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + "\\Familiares.csv"));
-            ClsFamiliares registroFamiliares = new ClsFamiliares();
+ 
             List<ClsFamiliares> listaFamiliares = new List<ClsFamiliares>();
             int contadormalos=0;
             while (!render.EndOfStream) {
@@ -258,6 +469,7 @@ namespace MigracionDeDatosBav
                 var values = line.Split(',').ToArray();
                 if (values.Length <= 15)
                 {
+                    ClsFamiliares registroFamiliares = new ClsFamiliares();
                     registroFamiliares.IFEFamiliares = ParseaCadena(values[0]);
                     registroFamiliares.NombreFamiliar = ParseaCadena(values[1]);
                     registroFamiliares.ApellidosFamiliar = ParseaCadena(values[2]);
@@ -283,14 +495,16 @@ namespace MigracionDeDatosBav
         }
         static List<ClsTitular> CrearListaTitular() {
             var reader = new StreamReader(File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + "\\TITULAR.csv"));
-            ClsTitular registroTitular = new ClsTitular();
+            
             List<ClsTitular> listaTitular = new List<ClsTitular>();
             var contadormalos = 0;
             while (!reader.EndOfStream) {
                 var line = reader.ReadLine();
                 var values = line.Split(',').ToArray();
+                ClsTitular registroTitular = new ClsTitular();
                 if (values.Length <= 27)
                 {
+                   
                     registroTitular.FechaIngreso = ParseaFecha(values[0]);
                     registroTitular.NombreTitular = ParseaCadena(values[1]);
                     registroTitular.ApellidoTitular = ParseaCadena(values[2]);
@@ -327,12 +541,13 @@ namespace MigracionDeDatosBav
         }
         static List<ClsVivienda> CreaListaVivienda() {
             var reader = new StreamReader(File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + "\\VIVIENDA.csv"));
-            ClsVivienda registroVivienda = new ClsVivienda();
+           
             List<ClsVivienda> listaVivienda = new List<ClsVivienda>();
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
                 var values = line.Split(',').ToArray();
+                ClsVivienda registroVivienda = new ClsVivienda();
                 registroVivienda.IFE = ParseaCadenaNumerica(values[0]);
                 registroVivienda.Economico = ParseaCadena(values[1]);
                 registroVivienda.Material = ParseaCadena(values[2]);
@@ -358,6 +573,25 @@ namespace MigracionDeDatosBav
             return listaVivienda;
         
         }
+        static string ParseaCadenaParaNumeroExterior(string cadena)
+        {
+            if (cadena == ""|| cadena =="0")
+            {
+                return "0";
+            }
+            if (cadena == "NULL")
+            {
+                return "0";
+            }
+            var respuesta = Regex.Split(cadena, @"\D+");
+                if (respuesta[1] == "")
+                {
+                    return "0";
+                }
+                return respuesta[1];
+  
+
+        }
 
         static string ParseaCadenaNumerica(string cadena) 
         {
@@ -370,6 +604,9 @@ namespace MigracionDeDatosBav
             var respuesta=Regex.Split(cadena, @"\D+");
             if (respuesta.Length <= 3)
             {
+                if (respuesta[1] == "") {
+                    return "0";
+                }
                 return respuesta[1];
             }
             else {
@@ -390,6 +627,25 @@ namespace MigracionDeDatosBav
             }
             
         
+        }
+        static string ParseaNombreCalle(string cadena)
+        {
+            if (cadena == "") {
+                return "";
+            }
+            var respuesta = Regex.Split(cadena, @"\W+");
+            StringBuilder cadenarespuesta = new StringBuilder();
+            foreach (var resp in respuesta) {
+                if (resp != "") {
+                    int result;
+                    if (!int.TryParse(resp, out result))
+                    {
+                        cadenarespuesta.Append(" " + resp);
+                    }
+                }
+            }
+            return cadenarespuesta.ToString().Trim();
+
         }
         static string ParseaCadena(string cadena) {
             if (cadena == "NULL" || cadena=="") {

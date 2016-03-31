@@ -16,5 +16,6 @@ namespace MigracionDeDatosBav
         public string EntidadDeNacimiento { get; set; }
         public string EstadoCivil { get; set; }
         public string Parentesco { get; set; }
+        public int NoParentesco { get; set; }
     }
 }
