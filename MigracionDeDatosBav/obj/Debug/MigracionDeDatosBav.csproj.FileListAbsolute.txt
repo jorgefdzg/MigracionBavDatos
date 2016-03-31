@@ -13,3 +13,6 @@ C:\Users\jorge\Documents\GitHub\MigracionBavDatos\MigracionDeDatosBav\obj\Debug\
 C:\Users\jorge.fernandez\Documents\MigracionBavDatos\MigracionDeDatosBav\bin\Debug\MigracionDeDatosBav.exe
 C:\Users\jorge.fernandez\Documents\MigracionBavDatos\MigracionDeDatosBav\bin\Debug\MigracionDeDatosBav.pdb
 C:\Users\jorge.fernandez\Documents\MigracionBavDatos\MigracionDeDatosBav\obj\Debug\MigracionDeDatosBav.csprojResolveAssemblyReference.cache
+C:\Users\jorge\Documents\GitHub\MigracionBavDatos\MigracionDeDatosBav\bin\Debug\MigracionDeDatosBav.exe
+C:\Users\jorge\Documents\GitHub\MigracionBavDatos\MigracionDeDatosBav\bin\Debug\MigracionDeDatosBav.pdb
+C:\Users\jorge\Documents\GitHub\MigracionBavDatos\MigracionDeDatosBav\obj\Debug\MigracionDeDatosBav.csprojResolveAssemblyReference.cache
