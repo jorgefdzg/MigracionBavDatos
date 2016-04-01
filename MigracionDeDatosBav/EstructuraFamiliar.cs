@@ -11,7 +11,7 @@ namespace MigracionDeDatosBav
         public int NumeroEstudio { get; set; }
         public string Nombre { get; set; }
         public string PrimerApellido { get; set; }
-        public DateTime FechaDeNacimiento { get; set; }
+        public string FechaDeNacimiento { get; set; }
         public string Genero { get; set; }
         public string EntidadDeNacimiento { get; set; }
         public string EstadoCivil { get; set; }

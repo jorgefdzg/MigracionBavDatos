@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
+using Microsoft.Office.Interop.Excel;
 
 namespace MigracionDeDatosBav
 {
@@ -22,23 +23,315 @@ namespace MigracionDeDatosBav
           listaEstudios = CreaListaEstudiosSocioEconomicos(listaViviendaMigrar, listaTitularMigrar);
           List<ClsEstructuraFamiliar> listaEstructura = new List<ClsEstructuraFamiliar>();
           listaEstructura = CrearListaEstructura(listaEstudios, listaTitularMigrar, listaFamiliaresMigrar);
+          CrearArchivosExcel(listaEstudios, listaEstructura);
+
+        }
+        static void CrearArchivosExcel(List<ClsEstudioSocioEconomico> listaEstudios, List<ClsEstructuraFamiliar> listaEstructura)
+        {
+
+            Application xmlApp = new Application();
+            if (xmlApp != null)
+            {
+                Workbook xmlWorkbook;
+                Worksheet xmlWorkSheet;
+                object misValue = System.Reflection.Missing.Value;
+
+                xmlWorkbook = xmlApp.Workbooks.Add(misValue);
+                xmlWorkSheet = (Worksheet)xmlWorkbook.Worksheets.get_Item(1);
+                int rowcontador = 0;
+                foreach (ClsEstudioSocioEconomico estudio in listaEstudios) {
+                    rowcontador += 1;
+                    int columcontador = 0;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.NumeroEstudio.ToString();
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.Programa;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.NombreGrupo;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.FechaLevantamiento;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.Estado;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.Municipio;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.Localidad;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.Vialidad;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.NumeroExterior.ToString();
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.NumeroInterior.ToString();
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.CodigoPostal;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.TipoVialidad;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.TipoAsentamiento;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.ServicioLuz;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.ServicioDrenaje;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.ServicoBaño;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.ServicioCombustible;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.ServicioAgua;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.Tenencia;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.TipoDeCasa;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.Muros;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.Techo;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.Piso;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.NumeroDeCuartos.ToString();
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.CuartosParaDormir.ToString();
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.TipoDeApoyo;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.FrecuenciaDeApoyo;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estudio.DuracionDelApoyo;
+                }
+                xmlWorkSheet = (Worksheet)xmlWorkbook.Worksheets.get_Item(2);
+                rowcontador = 0;
+                foreach (ClsEstructuraFamiliar estructura in listaEstructura) {
+                     rowcontador += 1;
+                    int columcontador = 0;
+                    columcontador += 1;
+                    xmlWorkSheet.Cells[rowcontador, columcontador] = estructura.NumeroEstudio.ToString();
+                      columcontador += 1;
+                      xmlWorkSheet.Cells[rowcontador, columcontador] = estructura.Nombre;
+                      columcontador += 1;
+                      xmlWorkSheet.Cells[rowcontador, columcontador] = estructura.PrimerApellido;
+                      columcontador += 1;
+                      xmlWorkSheet.Cells[rowcontador, columcontador] = estructura.FechaDeNacimiento;
+                      columcontador += 1;
+                      xmlWorkSheet.Cells[rowcontador, columcontador] = estructura.Genero;
+                      columcontador += 1;
+                      xmlWorkSheet.Cells[rowcontador, columcontador] = estructura.EntidadDeNacimiento;
+                      columcontador += 1;
+                      xmlWorkSheet.Cells[rowcontador, columcontador] = estructura.EstadoCivil;
+                      columcontador += 1;
+                      xmlWorkSheet.Cells[rowcontador, columcontador] = estructura.Parentesco;
+                }
+                xmlWorkbook.SaveAs(AppDomain.CurrentDomain.BaseDirectory + "archivo_estudios_Veracruz.xls");
+                xmlWorkbook.Close(true, misValue, misValue);
+                xmlApp.Quit();
+                releaseObject(xmlWorkSheet);
+                releaseObject(xmlWorkbook);
+                releaseObject(xmlApp);
+            }
+        }
+        static void releaseObject(object obj)
+        {
+            try
+            {
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
+                obj = null;
+            }
+            catch (Exception ex)
+            {
+                obj = null;
+         
+            }
+            finally
+            {
+                GC.Collect();
+            }
         }
         static List<ClsEstructuraFamiliar> CrearListaEstructura(List<ClsEstudioSocioEconomico> listaEstudios, List<ClsTitular> listaTitulares, List<ClsFamiliares> listaFamiliares) {
             List<ClsEstructuraFamiliar> listaFamilia = new List<ClsEstructuraFamiliar>();
             foreach (ClsEstudioSocioEconomico estudio in listaEstudios) {
+                List<ClsEstructuraFamiliar> listaprevia = new List<ClsEstructuraFamiliar>();
                 ClsEstructuraFamiliar estructura = new ClsEstructuraFamiliar();
                 ClsTitular titular = listaTitulares.FirstOrDefault(x => x.IFETitular == estudio.IFEAsociativo);
                 estructura.NumeroEstudio = estudio.NumeroEstudio;
                 estructura.Nombre = titular.NombreTitular;
                 estructura.PrimerApellido = titular.ApellidoTitular;
-                estructura.FechaDeNacimiento = CalculaFechaDeNacimiento(titular.FechaDeNacimiento, titular.EdadTitular);
+                estructura.FechaDeNacimiento = CalculaFechaDeNacimiento(titular.FechaDeNacimiento, titular.EdadTitular).ToString("dd/MM/yyyy");
                 estructura.Genero = ParseaSexo(titular.Sexo);
-                estructura.EntidadDeNacimiento = BuscaEntidadDeNacimiento(titular.CURPTitular);
+                estructura.EntidadDeNacimiento = "Veracruz";
+                estructura.EstadoCivil =ParseaEstadoCivil(titular.EstadoCivil);
+                estructura.NoParentesco = AsignaNumeroDeParentesco("TITULAR");
+                estructura.Parentesco = ParseaParentesco(estructura.NoParentesco, "TITULAR");
+                listaprevia.Add(estructura);
                 List<ClsFamiliares> familiares = listaFamiliares.FindAll(x => x.IFEFamiliares == estudio.IFEAsociativo);
-                foreach (ClsFamiliares familia in familiares) { 
-                
+                foreach (ClsFamiliares familia in familiares)
+                {
+                    if (familia.FechaNacimiento == "0000-00-00" && familia.EdadFamiliar == 0)
+                    {
+                    }
+                    else
+                    {
+                        estructura = new ClsEstructuraFamiliar();
+                        estructura.NumeroEstudio = estudio.NumeroEstudio;
+                        estructura.Nombre = familia.NombreFamiliar;
+                        estructura.PrimerApellido = familia.ApellidosFamiliar;
+                        estructura.FechaDeNacimiento = CalculaFechaDeNacimiento(familia.FechaNacimiento, familia.EdadFamiliar).ToString("dd/MM/yyyy");
+                        estructura.Genero = ParseaSexo(familia.SexoFamiliar);
+                        estructura.EntidadDeNacimiento = "Veracruz";
+                        estructura.EstadoCivil = ParseaEstadoCivilParaFamiliares(familia.Parentesco);
+                        estructura.NoParentesco = AsignaNumeroDeParentesco(familia.Parentesco);
+                        estructura.Parentesco = ParseaParentesco(estructura.NoParentesco, familia.Parentesco);
+                        listaprevia.Add(estructura);
+
+                    }
+                }
+                listaprevia.OrderBy(x => x.NoParentesco);
+                foreach (ClsEstructuraFamiliar familiar in listaprevia) {
+                    listaFamilia.Add(familiar);
                 }
             }
+            return listaFamilia;
+        }
+       static string ParseaEstadoCivilParaFamiliares(string parentesco){
+
+           if (parentesco == "ESPOSA" || parentesco == "ESPOSO" || parentesco == "MADRE" || parentesco == "PADRE" || parentesco == "NUERA" || parentesco == "YERNO")
+           {
+            return "Casado(a)";
+        }else{
+        return  "Soltero(a)";
+        }
+
+        }
+        static string ParseaParentesco(int numero, string parentesco) {
+            
+            if (parentesco == "TITULAR") {
+                return numero.ToString() + " - " + "Titular";
+            }
+            if (parentesco == "ESPOSA" || parentesco == "ESPOSO" || parentesco == "CONYUGE" || parentesco == "PAREJA" || parentesco == " ESPOSO" || parentesco == "CONYUGUE" || parentesco == "CONYUJE" || parentesco == "NOVIO" || parentesco == "MARIDO" || parentesco == "CONCUBINO" || parentesco == "CONCUBINA")
+            {
+                return numero.ToString() + " - " + "Cónyuge";
+            }
+            if (parentesco == "HIJO" || parentesco == "HIJA" || parentesco == "HIJASTRO" || parentesco == "HIJASTRA" || parentesco == "HIIJO" || parentesco == "HIJO ADOPTIVO" || parentesco == "HJO") {
+                return numero.ToString() + " - " + "Hijo(a)";
+            }
+            if (parentesco == "NIETO" || parentesco == "NEITA" || parentesco == "NIETA" || parentesco == "NNIETO" || parentesco == "NIETA POLITICA")
+            {
+                return numero.ToString() + " - " + "Nieto(a)";
+            }
+            if (parentesco == "BISNIETO" || parentesco == "BISNIETA")
+            {
+                return numero.ToString() + " - " + "Bisnieto(a)";
+            }
+            if (parentesco == "PADRE" || parentesco == "PAPA" || parentesco == "PADRASTRO" || parentesco == "P" || parentesco == "PAPA`")
+            {
+                return numero.ToString() + " - " + "Padre";
+            }
+            if (parentesco == "MADRE" || parentesco == "MDRE" || parentesco == "MAMA" || parentesco == "MADRASTRA" || parentesco== "MAMAÂ´" || parentesco=="M")
+            {
+                return numero.ToString() + " - " + "Madre";
+            }
+            if (parentesco == "SUEGRA" || parentesco == "SUEGRO" || parentesco == "CONSUEGRA") {
+                return numero.ToString() + " - " + "Suegro(a)";
+            }
+            if (parentesco == "HERMANA" || parentesco == "HERMANO" || parentesco == "MEDIA HERMANA" || parentesco == "HHERMANA") {
+                return numero.ToString() + " - " + "Hermano(a)";
+            }
+            if (parentesco.Contains("CU")) {
+                return numero.ToString() + " - " + "Cuñado(a)";
+            }
+            if (parentesco == "YERNO" || parentesco == "LLERNO" || parentesco == "HIERNO") {
+                return numero.ToString() + " - " + "Yerno";
+            }
+            if (parentesco == "NUERA")
+            {
+                return numero.ToString() + " - " + "Nuera";
+            }
+            if (parentesco == "TIA" || parentesco == "TIO")
+            {
+                return numero.ToString() + " - " + "Tio(a)";
+            }
+            if (parentesco == "PRIMA" || parentesco == "PRIMO" || parentesco == "PRIMA HERMANA")
+            {
+                return numero.ToString() + " - " + "Primo(a)";
+            }
+            return "14 - Otro";
+        }
+        static int AsignaNumeroDeParentesco(string parentesco) {
+            if (parentesco == "TITULAR") {
+                return 0;
+            }
+            if (parentesco == "ESPOSA" || parentesco == "ESPOSO" || parentesco == "CONYUGE" || parentesco == "PAREJA" || parentesco == " ESPOSO" || parentesco == "CONYUGUE" || parentesco == "CONYUJE" || parentesco == "NOVIO" || parentesco == "MARIDO" || parentesco == "CONCUBINO" || parentesco == "CONCUBINA")
+            {
+                return 1;
+            }
+            if (parentesco == "HIJO" || parentesco == "HIJA" || parentesco == "HIJASTRO" || parentesco == "HIJASTRA" || parentesco == "HIIJO" || parentesco == "HIJO ADOPTIVO" || parentesco == "HJO") {
+                return 2;
+            }
+            if (parentesco == "NIETO" || parentesco == "NEITA" || parentesco == "NIETA" || parentesco == "NNIETO" || parentesco == "NIETA POLITICA")
+            {
+                return 3;
+            }
+            if (parentesco == "BISNIETO" || parentesco == "BISNIETA")
+            {
+                return 4;
+            }
+            if (parentesco == "PADRE" || parentesco == "PAPA" || parentesco == "PADRASTRO" || parentesco == "P" || parentesco == "PAPA`")
+            {
+                return 5;
+            }
+            if (parentesco == "MADRE" || parentesco == "MDRE" || parentesco == "MAMA" || parentesco == "MADRASTRA" || parentesco == "MAMAÂ´" || parentesco == "M")
+            {
+                return 6;
+            }
+            if (parentesco == "SUEGRA" || parentesco == "SUEGRO" || parentesco == "CONSUEGRA")
+            {
+                return 7;
+            }
+            if (parentesco == "HERMANA" || parentesco == "HERMANO" || parentesco == "MEDIA HERMANA" || parentesco == "HHERMANA") 
+                {
+                    return 8;
+                }
+            if (parentesco.Contains("CU"))
+            {
+                return 9;
+            }
+             if (parentesco == "YERNO" || parentesco == "LLERNO" || parentesco == "HIERNO") 
+             {
+                 return 10;
+             }
+             if (parentesco == "NUERA")
+            {
+             return 11;
+             }
+             if (parentesco == "TIA" || parentesco == "TIO")
+             {
+                 return 12;
+             }
+             if (parentesco == "PRIMA" || parentesco == "PRIMO" || parentesco == "PRIMA HERMANA")
+             {
+                 return 13;
+             }
+            return 14;
+        }
+        static string ParseaEstadoCivil(string estadocivil) {
+            if (estadocivil == "CASADO") {
+                return "Casado(a)";
+            }
+            if (estadocivil == "DIVORCIADO") {
+                return "Divorciado(a)";
+            }
+            if (estadocivil == "SOLTERO") {
+                return "Soltero(a)";
+            }
+            if (estadocivil == "VIUDO") {
+                return " Viudo(a)";
+            }
+            if (estadocivil == "UNION LIBRE") {
+                return "Unión libre";
+            }
+            if (estadocivil == "SEPARADO") {
+                return "Divorciado(a)";
+            }
+            return "Soltero(a)";
         }
         static string ParseaSexo(string genero)
         {
@@ -65,10 +358,10 @@ namespace MigracionDeDatosBav
                     estudio.NumeroEstudio = contadorestudio;
                     estudio.Programa = "MESA BAV";
                     estudio.NombreGrupo = "MESA BAV";
-                    estudio.FechaLevantamiento = ParseaYRetornaFecha(titular.FechaIngreso);
+                    estudio.FechaLevantamiento = ParseaYRetornaFecha(titular.FechaIngreso).ToString("dd/MM/yyyy");
                     estudio.Estado = "Veracruz";
                     estudio.Municipio = ParseaMunicipio(titular.Municipio);
-                    estudio.Localidad = ParseaColonia(titular.Colonia);
+                    estudio.Localidad = ParseaColonia(estudio.Municipio,titular.Colonia);
                     estudio.Vialidad = ParseaNombreCalle(titular.Domicilio);
                     estudio.NumeroExterior = Convert.ToInt32(ParseaCadenaParaNumeroExterior(titular.Domicilio));
                     estudio.NumeroInterior = 0;
@@ -251,14 +544,19 @@ namespace MigracionDeDatosBav
             int indice = rnd.Next(0, 5);
             return array[indice];
         }
-        static string ParseaColonia(string colonia) {
+        static string ParseaColonia(string municipio, string colonia) {
+
+            if (colonia.Contains("TEJEDA"))
+            {
+                return "Adalberto Tejeda";
+            }
+            if (colonia.Contains("VIRGINIA")) {
+                return "Virginia Hernández Rodríguez";
+            }
             if (colonia.Contains("COYOL")) {
                 return "El Coyol";
             }
             if (colonia.Contains("VOLCANES")) {
-                return "Veracruz";
-            }
-            if (colonia.Contains("VIRGINIA")) {
                 return "Veracruz";
             }
             if (colonia.Contains("BUENAVISTA") || colonia.Contains("BUENA VISTA")) {
@@ -281,7 +579,7 @@ namespace MigracionDeDatosBav
                 return "Colonia México";
             }
             if (colonia.Contains("MAYO")){
-                return "Primero de Mayo";
+                return "Colonia Primero de Mayo";
             }
             if (colonia.Contains("PUENTE")) {
                 return "Fraccionamiento Puente Moreno";
@@ -378,6 +676,10 @@ namespace MigracionDeDatosBav
             if (colonia.Contains("SEPTIEMBRE")) {
                 return "Dieciséis de Septiembre";
             }
+            if (municipio == "Boca del Río")
+            {
+                return "Boca del Río";
+            }
             return "Veracruz";
         }
         static string ParseaMunicipio(string municipio) {
@@ -428,7 +730,7 @@ namespace MigracionDeDatosBav
         static DateTime CalculaFechaDeNacimiento(string fecha, int edad = 0)
         {
           DateTime FechaNacimiento = new DateTime();
-            if (edad != 0 && fecha == "")
+          if (edad != 0 && fecha == "0000-00-00")
             {
                 Random gen = new Random();
                 DateTime start = new DateTime(2015, 1, 1);
@@ -436,9 +738,29 @@ namespace MigracionDeDatosBav
                 int range = 300;
                 return start.AddDays(gen.Next(range));
             }
-            if (fecha != "") {
+            if (fecha != "" || fecha != "0000-00-00")
+            {
+                var cadena = fecha.Split('-');
+                int count = 0;
+                StringBuilder fechanueva = new StringBuilder();
+                foreach (var cad in cadena)
+                {
+                    string fetch;
+                    count += 1;
+                    if (cad == "00" || cad == "0000")
+                    {
 
-                FechaNacimiento = Convert.ToDateTime(fecha);
+                        fetch = "01";
+                    }
+                    else {
+                        fetch = cad;
+                    }
+                    fechanueva.Append(fetch);
+                    if (count < 3) {
+                        fechanueva.Append("-");
+                    }
+                }
+                FechaNacimiento = Convert.ToDateTime(fechanueva.ToString());
                 return FechaNacimiento;
             }
             return FechaNacimiento;

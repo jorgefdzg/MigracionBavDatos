@@ -11,7 +11,7 @@ namespace MigracionDeDatosBav
         public int NumeroEstudio { get; set; }
         public string Programa { get; set; }
         public string NombreGrupo { get; set; }
-        public DateTime FechaLevantamiento { get; set; }
+        public string FechaLevantamiento { get; set; }
         public string Estado { get; set; }
         public string Municipio { get; set; }
         public string Localidad { get; set; }
